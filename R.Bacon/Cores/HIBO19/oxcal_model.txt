@@ -1,0 +1,36 @@
+Plot()
+{
+Outlier_Model("General",T(5),U(0,4),"t");
+P_Sequence("",1,0.04,U(-2,2))
+{
+Boundary();
+R_Date("14C-7_shifted",11772,72) {Outlier(0.05);z=1328;};
+R_Date("14C-4",9973,121) {Outlier(0.05);z=1061;};
+R_Date("14C-3a",9598,41) {Outlier(0.05);z=964;};
+R_Date("14C-2a",8434,191) {Outlier(0.05);z=907;};
+Date("Flimser",N(calBP(9455),25)) {Outlier(0.05);z=896;};
+R_Date("14C-1a",8322,92) {Outlier(0.05);z=884;};
+R_Date("HB_4C_17",7861.42502383683,236.688656063647) {Outlier(0.05);z=820.9;};
+R_Date("HB_4C_08",6798.33510207331,100.411150863105) {Outlier(0.05);z=762.9;};
+R_Date("HB_4C_05",3665.19992436216,85.1242024348397) {Outlier(0.05);z=478.7;};
+R_Date("HB_4C_16",3190.58423678551,151.359452197993) {Outlier(0.05);z=423.5;};
+R_Date("HB_4C_15",2703.05261466733,93.6367769676578) {Outlier(0.05);z=363;};
+R_Date("HB_4C_14",2081.59787399292,96.0460950402737) {Outlier(0.05);z=301.5;};
+R_Date("HB_4C_03",1763.87431839365,74.4636951908546) {Outlier(0.05);z=274;};
+R_Date("HB_14C_20",952.27988867597,79.1735049291025) {Outlier(0.05);z=198.5;};
+R_Date("HB_4C_01",457.528294950549,69.3504586328344) {Outlier(0.05);z=111;};
+Date("visual11",N(calBP(57),5)) {Outlier(0.05);z=57;};
+Date("visual10",N(calBP(42),5)) {Outlier(0.05);z=54.5;};
+Date("visual9",N(calBP(40),5)) {Outlier(0.05);z=53;};
+Date("visual8",N(calBP(32),5)) {Outlier(0.05);z=50.7;};
+Date("visual7",N(calBP(28),5)) {Outlier(0.05);z=49;};
+Date("visual6",N(calBP(23),5)) {Outlier(0.05);z=46.3;};
+R_Date("HB_4C_13",150.081685387984,70.0853946818193) {Outlier(0.05);z=43.2;};
+Date("visual5",N(calBP(-4),5)) {Outlier(0.05);z=40;};
+Date("visual4",N(calBP(-37),5)) {Outlier(0.05);z=23;};
+Date("visual3",N(calBP(-55),5)) {Outlier(0.05);z=5.5;};
+Date("visual2",N(calBP(-60),5)) {Outlier(0.05);z=2;};
+Date("visual1",N(calBP(-65),5)) {Outlier(0.05);z=-1;};
+Boundary();
+};
+};
