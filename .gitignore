@@ -8,7 +8,6 @@ output/
 obsolete/
 
 AgeDepthModel/
-DamageAnalysis/
 DominantSpecies/
 MAG/
 OxCal_model/
@@ -18,11 +17,12 @@ VariantCalling/
 manuscript2_plots/
 manuscript3_plots/
 output_indiv/
-src/
 R.anthromes/
 R.community/
 R.pd/
 R.lda/
 
+*holi*
+DamageAnalysis/output_ANI*
 *.swp
 *subtree*
