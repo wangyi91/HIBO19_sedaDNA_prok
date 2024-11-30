@@ -1,7 +1,7 @@
 #!/usr/bin/env julia
 
 # This script generates table and heatmap of selected groups
-# It requires as objects in key_communities.jl as input, therefore should only be run after it.
+# It requires objects in key_communities.jl as input
 function output_hmp_tb_of_groups()
     upper_range=log1p(maximum(otudata.N_reads))
     for i in 1:length(Is)
@@ -27,5 +27,14 @@ function output_hmp_tb_of_groups()
     CSV.write("./NetworkAnalysis/output/table_dmg_group$(i)of$(length(Is)).csv", wide_dmg)
     CSV.write("./NetworkAnalysis/output/table_tax_group$(i)of$(length(Is)).csv", tax_tb)
     end
+
+    # Create a separate figure for the colorbar
+    colorbar_fig = Figure(size=(200, 100))  # Adjust size as needed
+
+    # Add colorbar with the same color range as the heatmap
+    Colorbar(colorbar_fig[1,1], colorrange=(0, upper_range), vertical=true, label=rich("log", subscript("e"),"(sequence count)"),height = 85, labelrotation=0)
+
+    # Save the colorbar figure
+    save("./NetworkAnalysis/output/legend_of_group_heatmaps.pdf", colorbar_fig)
 
 end
