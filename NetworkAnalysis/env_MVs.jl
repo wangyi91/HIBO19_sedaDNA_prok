@@ -27,9 +27,11 @@ for (i,netw) in enumerate([netw2, netw3,netw5])
     # a summary dataframe of node connections
     cnodes = DataFrame(node_name=names(netw), degree=degree(g), pos_connect=pc, neg_connect=nc);
     # find the most connected continous MVs
-    mvs = findall(x->netw.meta_variable_mask[x]==1 && !startswith(names(netw)[x], "d_")
-                  && !any(occursin.(["bSi","TOC","TIC","S","N30_to_60_median","yrBP"],names(netw)[x])),
-                  1:length(netw.variable_ids));
+    #mvs = findall(x->netw.meta_variable_mask[x]==1 && !startswith(names(netw)[x], "d_")
+    #              && !any(occursin.(["bSi","TOC","TIC","S","N30_to_60_median","yrBP"],names(netw)[x])),
+    #              1:length(netw.variable_ids));
+    mvs = findall(x->netw.meta_variable_mask[x]==1 && !startswith(names(netw)[x], "d_"), 1:length(netw.variable_ids));
+
     dfs[i] = @pipe cnodes[mvs,1:4] |> sort(_,:degree);
     dfs[i].noccur .= maximum([2i-1,2])
 end
@@ -57,7 +59,9 @@ landtypes = SortedDict("11"=>"Urban",
 geodata = SortedDict("S"=>"sulfur",
                     "TIC"=>"total inorganic carbon",
                    "TOC"=>"total organic carbon",
-                  "bSi"=>"biogenic silica");
+                  "bSi"=>"biogenic silica",
+                 "N30_to_60_median"=>"temperature",
+                 "yrBP"=>"continuous time");
 climdata = SortedDict("N30_to_60_median"=>"temperature","yrBP"=>"time (continous)");
 periods = SortedDict("period_bronze_age"=>"Bronze Age",
  "period_contemporary"=>"Contemporary",
@@ -74,9 +78,12 @@ dicts=merge(landtypes,geodata,climdata,periods);
 
 tit=["Land Use","landuse"]
 #tit=["(Pre)historic Periods","historic"]
+tit=["Environmental Variables","envs"]
 if tit[1]=="Land Use" 
     summ=filter(:node_name=>n->!startswith(n,"p"),df) 
-else summ =filter(:node_name=>n->startswith(n,"p"),df) 
+elseif tit[1]=="Land Use"
+    summ =filter(:node_name=>n->startswith(n,"p"),df) 
+else summ=filter(:node_name=>n->n in(["bSi","TOC","TIC","S","N30_to_60_median","yrBP"]),df)
 end
 #add mv_id for plotting
 ticks=summ.node_name |> unique;

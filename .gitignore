@@ -1,8 +1,9 @@
 *.xlsm
-.Rproj.user
+*.Rproj*
 .vscode/
 .Rhistory
 .DS_Store
+.RData
 
 output/
 obsolete/

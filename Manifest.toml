@@ -2,7 +2,7 @@
 
 julia_version = "1.9.4"
 manifest_format = "2.0"
-project_hash = "7bf054b840f2525c419d7c18d041c1ee159d14c7"
+project_hash = "2ad10cf9afa3c4a93b1869f6c1c4e2e45ead2aef"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -2092,6 +2092,12 @@ deps = ["ArrayInterface", "CloseOpenIntervals", "IfElse", "LayoutPointers", "Lin
 git-tree-sha1 = "f35f6ab602df8413a50c4a25ca14de821e8605fb"
 uuid = "7792a7ef-975c-4747-a70f-980b88e8d1da"
 version = "0.5.7"
+
+[[deps.StringDistances]]
+deps = ["Distances", "StatsAPI"]
+git-tree-sha1 = "5b2ca70b099f91e54d98064d5caf5cc9b541ad06"
+uuid = "88034a9c-02f8-509d-84a9-84ec65e18404"
+version = "0.11.3"
 
 [[deps.StringManipulation]]
 deps = ["PrecompileTools"]

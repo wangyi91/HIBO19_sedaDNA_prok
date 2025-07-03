@@ -33,8 +33,8 @@ function load_arrow_as_df(tag::String, ftax, frank::String, nreads::Int)
     end
     
     ## data of samples
-    mt = load("./metadata/HIBO_library_metadata_dated.csv") |> DataFrame # library metadata
-    x = @pipe leftjoin(df, select(mt,[:Label, :Middle_depth, :yrBP, :sigma, :N_filtered_reads]), on = :Label) |>
+    mt = load("./metadata/HIBO_library_metadata.csv") |> DataFrame # library metadata
+    x = @pipe leftjoin(df, select(mt,[:Label, :Middle_depth, :yrBP, :N_filtered_reads]), on = :Label) |>
         filter(:rho_Ac => r -> abs(r) <= 0.6, _) |>
         filter(:significance => s -> s>=0.3, _) |>
         filter(:N_reads => n -> n > nreads, _) |>
@@ -45,9 +45,8 @@ function load_arrow_as_df(tag::String, ftax, frank::String, nreads::Int)
         filter!(:tax_rank => r -> r==frank, x)
     end
     
-    ## data of controls 
-    y = @pipe leftjoin(df, select(mt,[:Label, :Middle_depth, :yrBP, :sigma, :N_filtered_reads]), on = :Label) |>
-        filter(:rho_Ac => r -> abs(r) <= 0.6, _) |>
+    ## data of controls y = @pipe leftjoin(df, select(mt,[:Label, :Middle_depth, :yrBP, :sigma, :N_filtered_reads]), on = :Label) |>
+    y = @pipe leftjoin(df, select(mt,[:Label, :Middle_depth, :yrBP, :N_filtered_reads]), on = :Label) |>
         filter(:significance => s -> s>=0.001, _) |>
         filter(:N_reads => n -> n > 10, _)|>
         filter(:Middle_depth=>d->ismissing(d),_) 
@@ -56,7 +55,7 @@ function load_arrow_as_df(tag::String, ftax, frank::String, nreads::Int)
     end
     
     ## remove contaminant taxa from sample data
-    if pip=="amaw" filter!(:tax_name=>n->!(n in y.tax_name), x) end
+    #if pip=="amaw" filter!(:tax_name=>n->!(n in y.tax_name), x) end
     return x, y
 end
 

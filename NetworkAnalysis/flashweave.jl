@@ -12,11 +12,11 @@ pip="amaw";add="_ANI92";
 alg=".lca";
 #alg=".local";
 tag="$pip$alg$add"
-
+frank="species"
 
 
 # Step 1: load data_training by running ./InitialExploration/vcat.jl 
-    otudata=load_object("./InitialExploration/data/$tag.jld2")
+    otudata=load_object("./deContamination/data/$tag.$frank.jld2")
 
 # Step 2: filter out singletons, convert data to otu table and save as csv
 keep = @pipe otudata |> combine(groupby(_, :tax_path), nrow=>"N_occur") |> filter(:N_occur=>o->o>=2, _)
