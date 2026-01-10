@@ -20,6 +20,19 @@ contam1 = readlines("./deContamination/output/contam_taxa_name.txt")
 ctrl= @pipe filter(:Middle_depth=>d->ismissing(d), df)
 contam2 = ctrl.tax_name
 
+# table of contaminants
+df_contam = @pipe df |> filter(:tax_name=>n-> n in union(contam1,contam2), _) |> 
+            select(_, [:tax_name,:tax_path]) |> unique(_)|>
+            DataFrames.transform(_, :tax_path=> ByRow(p->tax_at_rank(p, "phylum"))=> :phylum) |>
+            DataFrames.transform(_, :tax_path=> ByRow(p->tax_at_rank.(p, "class"))=> :class) |>
+            DataFrames.transform(_, :tax_path=> ByRow(p->tax_at_rank.(p, "family"))=> :family) |>
+            DataFrames.transform(_, :tax_path=> ByRow(p->tax_at_rank.(p, "genus"))=> :genus) |>
+            sort(_, [:phylum,:class,:family,:genus])
+
+CSV.write("./deContamination/output/contam_taxa_table.csv",df_contam)
+
+
+
 # remove taxa in controls and in "contam" list, drop controls
 df_clean = @pipe df |> filter(:tax_name=>n->!(n in union(contam1,contam2)), _) |> 
                        filter(:Label => l -> !(l in ctrl.Label),_)

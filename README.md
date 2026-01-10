@@ -3,7 +3,7 @@
 
 This repository contains scripts for data analyses and visualisation for bacteria and archaea recorded in the sedimentary ancient DNA of Lake Constance.  
 
-The manuscript of this study is currently under review in _Current Biology_.
+The manuscript of this study is currently under review in _The ISME Journal_.
 
 ## Prerequisite steps
 

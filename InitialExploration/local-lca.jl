@@ -18,6 +18,7 @@ alg = ".lca";
 
 add="_ANI95";
 add="_ANI92";
+add="_ANI92_r214";
 add=""; # default min. ANI=90
 
 tag = "$pip$alg$add"

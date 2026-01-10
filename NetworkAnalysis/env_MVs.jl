@@ -10,7 +10,8 @@ include("./NetworkAnalysis/_graph_process.jl")
 pip="amaw"; alg=".lca";add="_ANI92";
 tag=pip*alg*add
 
-otudata = load_object("./InitialExploration/data/$tag.jld2");k=0;#k=1
+dt = load_object("./InitialExploration/data/$tag.jld2");k=0;#k=1
+
 netw2 = load_network("./NetworkAnalysis/output/network_k$(k)_min2_$tag.jld2");
 netw3 = load_network("./NetworkAnalysis/output/network_k$(k)_min3_$tag.jld2");
 netw5 = load_network("./NetworkAnalysis/output/network_k$(k)_min5_$tag.jld2");
@@ -18,7 +19,7 @@ netw5 = load_network("./NetworkAnalysis/output/network_k$(k)_min5_$tag.jld2");
 ####################### Part 1: Most connected MVs ##############################################################
 dfs = [DataFrame(),DataFrame(),DataFrame()]
 
-for (i,netw) in enumerate([netw2, netw3,netw5])
+for (i,netw) in enumerate([netw2, netw3, netw5])
     g=graph(netw)
     # degree of nodes, only positive connections
     pc = sum(Graphs.weights(g).>0, dims=2) |> vec;
@@ -99,7 +100,7 @@ summ=leftjoin(select(summ,Not(:mv_id)),ytl, on=:node_name)
 
 
 using CairoMakie
-fig=Figure(resolution=(1000,nrow(ytl)*50+50))
+fig=Figure(size=(1000,nrow(ytl)*50+50))
 axs = Axis(fig[1, 1], title=tit[1], xlabel="Number of connections", ylabel="", yticks=ytl.mv_id,
            ytickformat=tks->[dicts[ytl[ytl.mv_id.==tk,:].node_name[1]] for tk in tks]);
 
@@ -116,41 +117,80 @@ Legend(fig[1,2], [connect_shade, netw_color], [["positive","negative"],string.([
 save("./NetworkAnalysis/output/barplot_MV_k$(k)_$(tit[2]).pdf", fig);
 
 
+####################### Part 2: Find taxa connected to MVs of interest ##############################################
+nw = load_network("./NetworkAnalysis/output/network_k1_min5_$tag.jld2");
+nw = load_network("./NetworkAnalysis/output/network_k0_min5_$tag.jld2");
+g = graph(nw)
+
+# Step 1: Find the vertex index for "N30_to_60_median"
+v = findfirst(==( "N30_to_60_median" ), names(nw))
+
+# Step 2: Get the indices of its neighbors
+neighbor_indices = neighbors(g, v)
+
+# Step 3: Map those indices back to names
+neighbor_names = names(nw)[neighbor_indices]
+
+neighbor_taxa = filter(!ismissing, tax_at_rank.(neighbor_names, "species"))
+
+# Separate neighbors by positive/negative connection
+pos_neighbors = Int[]
+neg_neighbors = Int[]
+
+for u in neighbor_indices
+    w = Graphs.weights(g)[v, u]
+    if w > 0
+        push!(pos_neighbors, u)
+    elseif w < 0
+        push!(neg_neighbors, u)
+    end
+end
+
+# Map indices to names
+pos_neighbor_names = names(nw)[pos_neighbors]
+neg_neighbor_names = names(nw)[neg_neighbors]
+pos_neighbor_taxa = filter(!ismissing, tax_at_rank.(pos_neighbor_names, "species"))
+neg_neighbor_taxa = filter(!ismissing, tax_at_rank.(neg_neighbor_names, "species"))
+
+# now go to key_communities.jl and load clique percolation
+all_matches = String[]  # will hold all collected taxa
+
+for i in 1:length(Is)
+    clqs = collect.(cliper[cliq_idx])[Is[i]]
+    clq = reduce(vcat, clqs) |> sort |> unique
+    splist = collect(skipmissing(tax_at_rank.(names(netw)[clq], "species")))
+    
+    matches = intersect(pos_neighbor_taxa, splist)
+    println(length(matches))
+    append!(all_matches, matches)
+end
+
+# Drop missings
+all_matches = filter(!ismissing, all_matches)
+
+dt_sub = filter(:tax_name=>n->n in all_matches, dt)
+sub = unstack(dt_sub,:Label, :tax_path, :N_reads)[:,2:end]
 
 
+using CairoMakie
+#sample_names = 1:nrow(sub)                # or actual sample IDs if you have them
+sample_names = @pipe dt_sub.yrBP |> unique; sample_names = round.(Int, sample_names)
+taxa_paths = names(sub)
 
-##################  NOT USING  ##### Part 2: Most connected species ##############################################
-# first rerun Part 1 first 4 commands to get cnodes for netw1
-ntaxa = sum(netw.meta_variable_mask.==0)
+n_taxa = length(taxa_names)
+ncols = 5                            # how many plots across
+nrows = ceil(Int, n_taxa / ncols)
 
-# Calculate inter- and intra-rank connections for each species
-# calculate if connections are within a given rank
-rank = "phylum" # rank to evaluate
-# construct a matrix showing if connections are intra-rank (1) or inter-rank (0)
-nm = names(netw)[1:ntaxa]
-rnm = tax_at_rank.(nm,rank)
-inrank = broadcast(==, rnm, permutedims(rnm))
+fig = Figure(size = (ncols * 300, nrows * 300))
 
-# add to df "cnodes"
-cnodes.pos_connect_intra_phylum.=0;
-cnodes.neg_connect_intra_phylum.=0;
-cnodes.pos_connect_intra_phylum[1:ntaxa] = @pipe (Graphs.weights(g).>0)[1:ntaxa,1:ntaxa] .* inrank |> sum(_;dims=2) |> vec;
-cnodes.neg_connect_intra_phylum[1:ntaxa] = @pipe (Graphs.weights(g).<0)[1:ntaxa,1:ntaxa] .* inrank |> sum(_;dims=2) |> vec;
-
-cnodes.pos_connect_inter_phylum.=0;
-cnodes.neg_connect_inter_phylum.=0;
-cnodes.pos_connect_inter_phylum[1:ntaxa] = @pipe (Graphs.weights(g).>0)[1:ntaxa,1:ntaxa] .* (inrank.==0) |> sum(_;dims=2) |> vec;
-cnodes.neg_connect_inter_phylum[1:ntaxa] = @pipe (Graphs.weights(g).<0)[1:ntaxa,1:ntaxa] .* (inrank.==0) |> sum(_;dims=2) |> vec;
-
-# keep only species
-cnodes = @pipe filter(:node_name=>n->occursin("s__",n),cnodes)|> sort(_,:degree)
-
-# plot species degree distribution
-fig=Figure()
-axs = Axis(fig[1, 1], xlabel="Degree of species", xticks=0:8:48)
-CairoMakie.hist!(axs, cnodes.degree, bins=0:4:52)
-save("./NetworkAnalysis/output/degree_distribution_species.pdf", fig);
-
-
-
-
+for (i, pth) in enumerate(taxa_paths)
+    taxon = tax_at_rank.(pth,"species")
+    counts = sub[:, pth] |> collect
+    ax = Axis(fig[div(i-1, ncols)+1, mod(i-1, ncols)+1],
+              title = "$(taxon)\n($(tax_at_rank(pth, "family")))", titlefont = :italic,
+              xticks = (1:length(sample_names), string.(sample_names)), xticklabelsize = 8,
+              xticklabelrotation = 3.1416/2, xticklabelalign = (:right, :center))
+    
+    barplot!(ax, 1:length(sample_names), counts, color = :steelblue)
+end
+save("./NetworkAnalysis/output/temp_taxa_barplot.png", fig)

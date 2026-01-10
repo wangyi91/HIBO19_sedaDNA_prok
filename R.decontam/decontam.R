@@ -6,7 +6,7 @@ library(scico)
 mt = read.csv(file.path("../metadata/HIBO_library_metadata.csv"))
 
 input_dir = "../deContamination/output"
-rank="species"
+rank="species"#"genus"
 
 taxa_names <- read.csv(file.path(input_dir, paste("ra_matrix.", rank, ".csv", sep = "")), header=F, nrows = 1) %>% 
     t %>% as.data.frame %>% filter(V1!="Label") %>% `colnames<-`("taxa_name")
@@ -22,7 +22,6 @@ sample_data$iscontrol <- sample_data$sample_type != "sample"
 
 method = "frequency"# "either",# "frequency", "prevalence",
 method = "prevalence"
-method = "frequency"# "either",# "frequency", "prevalence",
 contamdf <- isContaminant(taxa_matrix, 
                                conc = sample_data$molarity, 
                                neg = sample_data$iscontrol, 
@@ -36,8 +35,7 @@ tax = contamdf %>% filter(contaminant==TRUE) %>% rownames
 tax_dict <- setNames(tax_unchanged$taxa_name, tax)
 
 # Export taxa list for downstream processing in julia
-#write.csv(tax_unchanged$taxa_name, "output/contam_taxa_name.csv", row.names = F, quote = TRUE)
-writeLines(tax_unchanged$taxa_name, "output/contam_taxa_name.txt")
+writeLines(tax_unchanged$taxa_name, paste("output/contam_",rank,"_name.txt",sep=""))
 
 
 
