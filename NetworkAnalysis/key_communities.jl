@@ -38,11 +38,11 @@ Is=is[display_order]
 
 titles = ["Long-term, stable",
           "Long-term, unstable",
-          "Early Holocene, uncommon",
-          "Late Holocene, uncommon",
-          "Deposited by floods",
-          "Present since the Middle Ages", 
-          "Present since modern time"]
+          "Holocene uncommon 1",
+          "Holocene uncommon 2",
+          "Linked to flood depositions",
+          "Predominant since the Middle Ages", 
+          "Predominant since modern time"]
 
 # count n of species in each community-group
 nsps = [@pipe vcat(collect.(cliper[cliq_idx])[Is[i]]...) |> unique |> count(x->x<=ntaxa, _) for i in 1:length(Is)]
