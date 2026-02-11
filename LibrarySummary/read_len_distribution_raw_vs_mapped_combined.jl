@@ -3,7 +3,7 @@ using StatsBase
 #using Plots
 using Base.Threads
 using StatsPlots
-default(fontfamily = "DejaVu Sans")
+default(fontfamily = "Helvetica")
 using CSV
 using DataFrames
 using FileIO
@@ -94,24 +94,26 @@ sample_mapped_lengths = vcat(local_mapped...);
 # Create density plot for combined sample data
 combined_plot = plot(
     title="",
-    xlabel="Read Length",
+    xlabel="Read length",
     ylabel="Density",
     legend=:topright,
+    legend_foreground_color = nothing,
     grid=false,
     xtickfont=font(8),
     ytickfont=font(8),
-    left_margin=5mm, bottom_margin=5mm,
+    xguidefontsize=8,
+    yguidefontsize=8,
+    left_margin=2mm, bottom_margin=2mm,
     size=(400, 300)
 )
 
 density!(combined_plot, sample_all_lengths; 
-         bandwidth = 0.5, linewidth=2, linecolor=:black, linestyle=:dot, 
-         label="All Reads"
-        )
+         linewidth=0, fill=(0,:darkgrey), fillalpha=0.4, linecolor=nothing, bandwidth = 1, 
+         label="All reads")
 
 density!(combined_plot, sample_mapped_lengths; 
-         bandwidth = 0.5, linewidth=2, linecolor=:blue, 
-             label="Mapped Reads, Passed Quality Filtration")
+         bandwidth = 1, linewidth=2, linecolor=:palegreen4, 
+             label="Mapped reads, passed quality filtration")
 
 # Save combined plot
 savefig(combined_plot, "./LibrarySummary/output/read_length_distribution_combined_samples_only.pdf")

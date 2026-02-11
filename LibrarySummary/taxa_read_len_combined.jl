@@ -1,10 +1,10 @@
 #!/usr/bin/env julia
 using Plots
-default(fontfamily = "DejaVu Sans")
+default(fontfamily = "Helvetica")
 using StatsPlots
 using FileIO
 using Measures
-using DataFrames, CSV, JLD2, StatsPlots, Plots, Statistics
+using DataFrames, CSV, JLD2, Statistics
 
 include("./MicrobeProfiling/_get_annotated_df.jl")
 include("./NetworkAnalysis/_graph_process.jl")
@@ -61,21 +61,24 @@ w_contam = df_cont.n_reads
 
 combined_plot = plot(
     title="",
-    xlabel="Average Read Length",
+    xlabel="Average read length of taxa",
     ylabel="Density",
     legend=:topright,
+    legend_foreground_color = nothing,
     grid=false,
     xtickfont=font(8),
     ytickfont=font(8),
-    left_margin=5mm, bottom_margin=5mm,
+    xguidefontsize=8,
+    yguidefontsize=8,
+    left_margin=2mm, bottom_margin=2mm,
     size=(400, 300)
 )
 
 # Plot both contaminant and non-contaminant distributions
-density!(combined_plot, x_all; weights=w_all, linewidth=0, fill=(0,:darkgrey),fillalpha=0.5, linecolor=nothing, bandwidth = 0.5, label="All taxa")
-density!(combined_plot, x_ctrl; weights=w_ctrl, linewidth=0, fill=(0,:rosybrown),fillalpha=0.5, linecolor=nothing, bandwidth = 0.5, label="Taxa in controls")
-density!(combined_plot, x_contam; weights=w_contam, linewidth=1.5, linecolor=:darkred, linestyle=:dot, bandwidth = 0.5, label="Identified contaminants")
-density!(combined_plot, x_noncontam; weights=w_noncontam, linewidth=1.5, linecolor=:darkblue, bandwidth = 0.5, label="Non-contaminants")
+density!(combined_plot, x_all; weights=w_all, linewidth=0, fill=(0,:darkgrey),fillalpha=0.3, linecolor=nothing, bandwidth = 0.5, label="All taxa")
+density!(combined_plot, x_ctrl; weights=w_ctrl, linewidth=0, fill=(0,:lightsalmon),fillalpha=0.5, linecolor=nothing, bandwidth = 0.5, label="Taxa in controls")
+density!(combined_plot, x_contam; weights=w_contam, linewidth=1.5, linecolor=:deeppink4, linestyle=:dot, bandwidth = 0.5, label="Identified contaminants")
+density!(combined_plot, x_noncontam; weights=w_noncontam, linewidth=1.5, linecolor=:deepskyblue3, bandwidth = 0.5, label="Non-contaminants")
 
 # Save
 savefig(combined_plot, "./LibrarySummary/output/taxa_read_length_weighted_combined.pdf")
