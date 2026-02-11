@@ -45,9 +45,13 @@ bg = pdf(dens,dmg_range,y_range);
 
 # Plot setup
 fig = Figure(size=(1000,600))
-axs = [Axis(fig[m,n], limits=(0,0.3,minimum(y_range),maximum(y_range)), title=permutedims(reshape(titles, (4,2)))[m,n]*"\n$(permutedims(reshape(nsps,(4,2)))[m,n]) taxa") for m in 1:2, n in 1:4]
-ylabel = Label(fig[1:2, 0], ylab, rotation = pi/2)
-xlabel = Label(fig[3,1:4], "DNA damage")
+axs = [Axis(fig[m,n], limits=(0,0.3,minimum(y_range),maximum(y_range)), 
+            ylabel = ylab, xlabel="DNA damage", xlabelpadding=0, ylabelpadding=0,
+            xticklabelsize=12, yticklabelsize=12, xlabelsize=12, ylabelsize=12,
+            title=permutedims(reshape(titles, (4,2)))[m,n]*"\n$(permutedims(reshape(nsps,(4,2)))[m,n]) taxa",
+            titlefont = :regular, titlesize = 14) for m in 1:2, n in 1:4]
+#ylabel = Label(fig[1:2, 0], ylab, rotation = pi/2)
+#xlabel = Label(fig[3,1:4], "DNA damage")
 
 # Plot background and scatter data
 for m in 1:2, n in 1:4
