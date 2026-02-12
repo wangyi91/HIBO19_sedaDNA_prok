@@ -73,8 +73,8 @@ save("./DamageAnalysis/output/dmg_hist_$(tag)_$(ftax)_age.pdf", fig);
 # --- partial plot for top samples only, evenly spaced ---
 # weight for histogram
 weightdict = Dict(
-    "Archaea"     => x -> x / 45,
-    "Bacteria"    => x -> x / 300
+    "Archaea"     => x -> x / 50,
+    "Bacteria"    => x -> x / 400
 )
 
 ruler=[0,300,600,900,1200,1500,1800,2100,2400,2700,3000,3300,3600,3900]
@@ -82,7 +82,7 @@ ruler=[0,300,600,900,1200,1500,1800,2100,2400,2700,3000,3300,3600,3900]
 age_dict = Dict(ages[i] => ruler[i] for i in 1:14)
 
 fig = Figure(size=(250,600))
-ax=Axis(fig[1, 1], limits=(0,0.2,-ruler[end]-50,-ruler[1]+500), yticks=(-ruler, string.(round.(Int, ages[1:14]))),
+ax=Axis(fig[1, 1], limits=(0,0.2,-ruler[end]-50,-ruler[1]+400), yticks=(-ruler, string.(round.(Int, ages[1:14]))),
      title = "$ftax, top 14 samples", titlesize=14, titlefont = :regular,
      xlabel="DNA damage", ylabel="Year BP", yreversed=false, yticklabelsize=12, xticklabelsize=12, ylabelsize=12, xlabelsize=12)
 ax.xgridvisible = false
