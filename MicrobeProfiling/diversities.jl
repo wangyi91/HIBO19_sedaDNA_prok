@@ -6,10 +6,9 @@ include("./MicrobeProfiling/_get_annotated_df.jl")
 
 pip="amaw"; alg=".lca";add="_ANI92";
 tag=pip*alg*add
-frank="species"
+rank="species"
 
-#otudata = load_object("./InitialExploration/data/$tag.jld2")
-otudata = load_object("./deContamination/data/$tag.$frank.jld2")
+otudata = load_object("./deContamination/data/$tag.$rank.jld2")
 
 # plot relative read abundance by phylum in each sample, bac and arc separate
 dt = @pipe otudata |> DataFrames.transform(_, :tax_path=> ByRow(p->tax_at_rank(p, "phylum"))=> :phylum) |>

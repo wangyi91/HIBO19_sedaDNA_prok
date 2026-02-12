@@ -21,11 +21,11 @@ write_arrow(tag)
 
 
 # join metadata; filter based on N_reads and tax_rank
-nreads=50; ftax=""; frank="species";
+nreads=50; ftax=""; rank="species";
 ftax = ["Bacteria","Archaea"]
 
 ## data of samples
-(x,y) = load_arrow_as_df(tag, ftax, frank, nreads)
+(x,y) = load_arrow_as_df(tag, ftax, rank, nreads)
 
 # read acc2taxid file
 using CSVFiles
@@ -49,13 +49,7 @@ x.tax_name = [n[4:end] for n in x.tax_name]
 leftjoin!(x,tb1, on=[:tax_id=>:taxid, :Label=>:label])
 
 
-
-
-
 using JLD2
-save_object("./InitialExploration/data/$tag.$frank.jld2",x)
-save_object("./InitialExploration/data/$tag.$frank.samplecontrol.jld2",z)
-
-
-
+save_object("./InitialExploration/data/$tag.$rank.jld2",x)
+save_object("./InitialExploration/data/$tag.$rank.samplecontrol.jld2",z)
 
