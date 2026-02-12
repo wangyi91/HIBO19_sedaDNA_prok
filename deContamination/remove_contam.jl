@@ -7,11 +7,11 @@ include("./NetworkAnalysis/_graph_process.jl")
 pip="amaw";add="_ANI92";
 alg=".lca";
 tag="$pip$alg$add"
-frank="species" #genus, family
+rank="species" 
 
 
 # load datatable that contain both samples and controls
-df=load_object("./InitialExploration/data/$tag.$frank.samplecontrol.jld2")
+df=load_object("./InitialExploration/data/$tag.$rank.samplecontrol.jld2")
 
 # read taxa marked as contaminants in decontam (R)
 contam1 = readlines("./deContamination/output/contam_taxa_name.txt")
@@ -37,7 +37,11 @@ CSV.write("./deContamination/output/contam_taxa_table.csv",df_contam)
 df_clean = @pipe df |> filter(:tax_name=>n->!(n in union(contam1,contam2)), _) |> 
                        filter(:Label => l -> !(l in ctrl.Label),_)
 
+# Save filtered dataset
+save_object("./deContamination/data/$tag.$rank.jld2", df_clean)
 
+
+# --- Decontamination Visualisation ---
 # compare samples before and after decontamination, in PCA plot
 using Statistics
 using MultivariateStats
@@ -58,7 +62,6 @@ for col in setdiff(names(df_pivot), names(df_clean_pivot))
 end
 
 
-
 # 3. Extract sample names and prepare data matrix 
 group_shape = vcat(fill(:cross, length(df_pivot.Label)), fill(:utriangle, length(df_pivot.Label)))
 group_color = vcat(unique(df_clean.yrBP),unique(df_clean.yrBP))
@@ -67,7 +70,6 @@ X = vcat(df_pivot[:, Not(:Label)], df_clean_pivot[:, Not(:Label)]) |> Matrix |> 
 
 # 4. Optional: log transform or normalize 
 X_log = log1p.(X')
-
 
 
 # 5. Perform PCA 
@@ -93,16 +95,5 @@ p=Plots.plot(X_pca[1,:], X_pca[2,:], seriestype = :scatter,
              ylabel = "PC2",         
              label="", legend=true);
 savefig("./deContamination/output/pca_decontam.pdf");
-
-
-# 7. Save filtered dataset
-save_object("./deContamination/data/$tag.$frank.jld2", df_clean)
-
-
-
-
-
-
-
 
 

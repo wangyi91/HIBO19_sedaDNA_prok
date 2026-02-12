@@ -11,7 +11,7 @@ hideydecorations!.(axs[2:end], grid = false);
 #hidexdecorations!.(axs[2:end], label=false, ticklabels=false, grid=false);
 linkyaxes!(axs...);
 
-bxs = [Axis(fig[1,i], limits=(0,4,nothing,nothing), xlabel="Phylogenetic distance", ylabel="No. connections", 
+bxs = [Axis(fig[1,i], limits=(0,4,nothing,nothing), xlabel="Phylogenetic distance", ylabel="Network connections", 
             xticklabelsize=13, yticklabelsize=13, xlabelpadding=0, ylabelpadding=0, 
             title=titles[i]*"\n"*string(nsps[i])*" taxa", titlefont = :regular, titlesize = 15) for i in 1:length(Is)]; # on bxs hist of phylo distance is plotted
 hidedecorations!.(bxs, label=false, ticklabels = false);

@@ -7,11 +7,11 @@ include("./NetworkAnalysis/_graph_process.jl")
 pip="amaw";add="_ANI92";
 alg=".lca";
 tag="$pip$alg$add"
-frank="species" #genus, family
+rank="species"
 
 
 # Step 1: load datatable that contain both samples and controls
-df=load_object("./InitialExploration/data/$tag.$frank.samplecontrol.jld2")
+df = load_object("./InitialExploration/data/$tag.$rank.samplecontrol.jld2")
 
 
 # Group by sample (Label) and taxon
@@ -43,9 +43,9 @@ sample_status.sample_type = ifelse.(in.(sample_status.Label, Ref(x.Label)), "sam
 # Merge with DNA concentrations
 sample_data = leftjoin(sample_status, select(mt,["Label","molarity"]), on = :Label)
 
-CSV.write("./deContamination/output/ra_matrix.$frank.csv", taxa_matrix)
-CSV.write("./deContamination/output/dmg_matrix.$frank.csv", dmg_matrix)
-CSV.write("./deContamination/output/sample_data.$frank.csv", sample_data)
+CSV.write("./deContamination/output/ra_matrix.$rank.csv", taxa_matrix)
+CSV.write("./deContamination/output/dmg_matrix.$rank.csv", dmg_matrix)
+CSV.write("./deContamination/output/sample_data.$rank.csv", sample_data)
 
 
 

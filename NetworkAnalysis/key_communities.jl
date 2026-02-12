@@ -12,10 +12,10 @@ include("./NetworkAnalysis/_spectral_clustering.jl")
 include("./NetworkAnalysis/_plot_communities.jl") # contains function generate_plot()
 include("./NetworkAnalysis/_heatmap_table_of_groups.jl") # contains function output_tb_hmp_of_groups()
 
-pip="amaw"; alg=".lca";add="_ANI92";
+pip="amaw"; alg=".lca";add="_ANI92";rank="species";
 tag=pip*alg*add
 
-otudata = load_object("./InitialExploration/data/$tag.jld2")
+otudata = load_object("./deContamination/data/$tag.$rank.jld2")
 netw = load_network("./NetworkAnalysis/output/network_k1_min2_$tag.jld2")
 g = graph(netw)
 cliper=clique_percolation(g,k=3)
@@ -29,9 +29,6 @@ ngroups=7
 grouping = sp_cluster(cliper, cliq_idx, otudata, ngroups)
 ntax = [@pipe vcat(collect.(cliper[cliq_idx])[grouping[i]]...) |> unique |> count(x->x<=ntaxa, _) for i in 1:length(grouping)]
 
-# key community-groups; each element of Is is a vector of i's; i's are indices of cliq_idx
-#is=[[]];is = [push!(is,[]) for i in 1:(ngroups-1)][1];# initialise empty Is
-#for (i,gr) in enumerate(grouping) push!(is[gr],i) end; # fill in Is based on grouping
 is=grouping[sortperm(ntax, rev=true)[1:7]] # choose the 7 most taxa abundant groups to present
 display_order = [6,5,7,1,3,4,2]; # reorder Is for data presentation
 Is=is[display_order]

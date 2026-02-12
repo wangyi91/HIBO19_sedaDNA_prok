@@ -38,11 +38,12 @@ df = vcat(com,not,single, cols=:union);
 summ = @pipe df|> unique(_,[:tax_name,:community_size]) |> combine(groupby(_, :community_size), nrow=>:n_tax)
 
 using StatsPlots
+default(fontfamily = "Helvetica")
 gr(margins = 1.5Plots.cm, size=(850, 500))
 StatsPlots.boxplot(df.community_size, df.N_reads, fill=:skyblue,yaxis=:log10, marker=(1,:black),line=(1,:black),
-               xlabel="Community size", ylabel="Read count of each species occurence", label="nreads", legend = false);
+               xlabel="Size of assemblages identified with clique percolation", ylabel="Read count of each taxon occurence", label="nreads", legend = false);
 StatsPlots.scatter!(twinx(),summ.community_size, summ.n_tax, yaxis=:log10, markercolor=:orange, 
-                    ylabel="Total number of unique species", label="ntax", legend = false);
+                    ylabel="Total number of unique taxa", label="ntax", legend = false);
 savefig("./NetworkAnalysis/output/boxplot_scomm_vs_nreads.pdf");
 
 
