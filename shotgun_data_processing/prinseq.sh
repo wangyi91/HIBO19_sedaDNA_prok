@@ -6,7 +6,7 @@
 #PBS -j oe
 #PBS -o log_prinseq
 
-source /home/kn/kn_kn/kn_pop524719/.bashrc
+source ~/.bashrc
 
 mkdir -p trim2ends
 cd trim2ends

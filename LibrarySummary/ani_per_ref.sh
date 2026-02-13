@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BAM_DIR="../../EnvironmenTracker/results_ani70/taxonomic-profiling"
+BAM_DIR="../../EnvironmenTracker/results/taxonomic-profiling"
 OUT_DIR="./input"
 mkdir -p "$OUT_DIR"
 

@@ -5,12 +5,8 @@
 #PBS -N sga
 #PBS -j oe
 
-source /home/kn/kn_kn/kn_pop524719/.bashrc
+source ~/.bashrc
 cd $hb/fastp
-conda activate shotgun
-
-#loc='/beegfs/work/kn_pop524719/HIBO_shotgun/fastp/AVXF-1-30'
-#libid='AVXF-1-30'
 
 sga preprocess -m 30 --dust-threshold=4 ${loc}.trimmed.merged.fastq.gz -o ${loc}.sga4.fastq
 sga index --algorithm=ropebwt --threads=14 ${loc}.sga4.fastq

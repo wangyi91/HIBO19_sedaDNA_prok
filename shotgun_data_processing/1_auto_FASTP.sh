@@ -6,7 +6,7 @@
 #PBS -j oe
 #PBS -o LOG_auto_fastp
 
-source /home/kn/kn_kn/kn_pop524719/.bashrc
+source ~/.bashrc # defines env variables
 mkdir -p $hb/fastp
 cd $hb/fastp
 

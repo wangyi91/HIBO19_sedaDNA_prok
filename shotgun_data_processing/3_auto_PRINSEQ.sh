@@ -6,7 +6,7 @@
 #PBS -j oe
 #PBS -o LOG_auto_prinseq
 
-source /home/kn/kn_kn/kn_pop524719/.bashrc
+source ~/.bashrc
 mkdir -p $hb/trim2ends
 cd $hb/trim2ends
 
