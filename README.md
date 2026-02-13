@@ -9,7 +9,7 @@ The manuscript of this study is provisionaly accepted in _The ISME Journal_.
 
 Raw sequence data (fastq files) were processed with scripts in the directory `shotgun_data_processing`.
 
-Then, fastq files were mapped against reference databases using the `aMAW-pipeline` for taxonomic profiling using the [GTDB database](https://gtdb.ecogenomic.org) (this study used the [r207 release](https://data.gtdb.ecogenomic.org/releases/release207/)), and DNA damage is subsequently estimated with `metaDMG v0.38.0`.
+Then, fastq files were mapped against reference databases using the `aMAW-pipeline` (Fernandez-Guerra, in prep) for taxonomic profiling using the [GTDB database](https://gtdb.ecogenomic.org) (this study used the [r207 release](https://data.gtdb.ecogenomic.org/releases/release207/)), and DNA damage is subsequently estimated with `metaDMG v0.38.0`.
 
 ## Input files
 The input files for analyses are: 
