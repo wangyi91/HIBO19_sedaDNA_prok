@@ -3,7 +3,7 @@
 
 This repository contains scripts for data processing, analyses and visualisation for bacteria and archaea recorded in the sedimentary ancient DNA of Lake Constance.  
 
-The manuscript of this study is provisionaly accepted in _The ISME Journal_.
+The manuscript of this study is currently provisionally accepted in _The ISME Journal_.
 
 ## Prerequisite steps
 
