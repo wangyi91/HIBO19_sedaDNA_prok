@@ -10,6 +10,7 @@ import Cairo, Fontconfig
 
 include("./MicrobeProfiling/_get_annotated_df.jl")
 include("./NetworkAnalysis/_graph_process.jl")
+include("env.jl") # contains WORK_DIR
 
 pip="amaw"; alg=".lca";add="_ANI92";
 tag=pip*alg*add
@@ -17,19 +18,17 @@ tag=pip*alg*add
 netw = load_network("./NetworkAnalysis/output/network_$tag.jld2")
 g = graph(netw)
 
-# Part 1: phylogenetic distance between taxa of interest
+# --- Calculate pair-wise phylogenetic distance between taxa ---
 #
-############## Run only when tree is updated using tree_all.jl #################
+# Trees are built with phyloT and then modified using R.pd/tree.R
 using Phylo
-file1 = "/maps/projects/wintherpedersen/people/tvg137/HIBO_shotgun/analysis/MicrobeProfiling/output/Bacteria_all_all_50.modified.newick"
+file1 = WORK_DIR*"/HIBO_shotgun/analysis/MicrobeProfiling/output/Bacteria_all_all_50.modified.newick"
 tree1 = open(parsenewick, Phylo.path(file1))
-#leafnames = getleafnames(tree1)
 nodenames1 = getnodenames(tree1)
 
-file2 = "/maps/projects/wintherpedersen/people/tvg137/HIBO_shotgun/analysis/MicrobeProfiling/output/Archaea_all_all_50.modified.newick"
+file2 = WORK_DIR*"HIBO_shotgun/analysis/MicrobeProfiling/output/Archaea_all_all_50.modified.newick"
 tree2 = open(parsenewick, Phylo.path(file2))
 nodenames2 = getnodenames(tree2)
-
 
 ntaxa = sum(netw.meta_variable_mask.==0)
 netw_nodenames = names(netw)[1:ntaxa]
@@ -52,34 +51,6 @@ end
 save_object("./NetworkAnalysis/output/phylodist_$tag.jld2", phylodist)
 #############################################################
 
+# to load phylodist
 phylodist = load_object("./NetworkAnalysis/output/phylodist_$tag.jld2")
-
-a=vec(phylodist)
-
-adjmt = adjacency_matrix(g)[1:ntaxa,1:ntaxa]
-# pos
-sub = (adjmt.>0) .* phylodist 
-b=vec(sub)
-w = (adjmt.>0).* adjmt .* (phylodist .>0) 
-
-using StatsPlots
-gr(margins = 1.5Plots.cm)
-StatsPlots.density(b[findall(in(1e-10..10),b)], weights = collect(w[findall(in(1e-10..10),w)]), labels="positive");
-StatsPlots.density!(a[findall(in(1e-10..10),a)], labels="random");
-savefig("./NetworkAnalysis/output/hist_phylodist_positive$add3.pdf");
-
-# neg
-sub = (adjmt.<0) .* phylodist 
-b=vec(sub)
-w = (adjmt.<0).* adjmt .* (phylodist .>0) * (-1)
-
-gr(margins = 1.5Plots.cm)
-StatsPlots.density(b[findall(in(1e-10..10),b)], weights = collect(w[findall(in(1e-10..10),w)]), labels="negative");
-StatsPlots.density!(a[findall(in(1e-10..10),a)], labels="random");
-savefig("./NetworkAnalysis/output/hist_phylodist_negative$add3.pdf");
-
-
-
-
-
 

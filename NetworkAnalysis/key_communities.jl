@@ -16,7 +16,7 @@ pip="amaw"; alg=".lca";add="_ANI92";rank="species";
 tag=pip*alg*add
 
 otudata = load_object("./deContamination/data/$tag.$rank.jld2")
-netw = load_network("./NetworkAnalysis/output/network_k1_min2_$tag.jld2")
+netw = load_network("./NetworkAnalysis/output/network_$tag.jld2")
 g = graph(netw)
 cliper=clique_percolation(g,k=3)
 cliq_idx = findall(>(2), length.(cliper));
