@@ -25,16 +25,19 @@ end
 tmp = filter(:tax_path=>p->occursin(ftax,p),otudata);
 writedlm("./MicrobeProfiling/output/taxlist_$(ftax).csv", String.(unique(tmp.tax_name)))
 
-# copy taxlist_xxx.csv file as input for R.pd, e.g.:
-# rsync -avP <path_in_HPC>/MicrobeProfiling/output/taxlist*.csv <path_local_PC>/MicrobeProfiling/output/
+# copy taxlist_xxx.csv file as input for phyloT, e.g.:
+# rsync -avP <path_in_HPC>/MicrobeProfiling/output/taxlist*.csv <path_local_PC>
 
-# use phyloT to make trees, save in newick format and move to
+# use phyloT to make trees, with taxlist_xxx.csv as input. Save in newick format and move to
 # R.pd/data/Bacteria or ./Archaea
 
 # use R.pd/tree.R to remove bootstrap values 
 
 # copy modified trees as input for phylo_distance.jl
 # rsync -avP <path_local_PC>/R.pd/data/Bacteria/Bacteria_HB_{0..9}{0..9}.modified.newick <path_in_HPC>/MicrobeProfiling/output
+
+
+
 
 # --- Calculate per-sample Phylogenetic Diversity and merge ---
 Libs=unique(otudata.Label)
