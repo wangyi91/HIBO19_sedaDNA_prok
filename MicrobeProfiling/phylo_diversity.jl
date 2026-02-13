@@ -1,9 +1,11 @@
 #!/usr/bin/env julia
 using Diversity, Phylo, DataFramesMeta
 using CSV, JLD2
-include("./MicrobeProfiling/_get_annotated_df.jl")
 
+include("./MicrobeProfiling/_get_annotated_df.jl")
+include("env.jl") # WORK_DIR
 pip="amaw"; alg=".lca";add="_ANI92";rank="species";
+
 tag=pip*alg*add
 otudata = load_object("./deContamination§/data/$tag.$rank.jld2")
 ftax = "Bacteria"; ftax = "Archaea";
@@ -26,15 +28,14 @@ tmp = filter(:tax_path=>p->occursin(ftax,p),otudata);
 writedlm("./MicrobeProfiling/output/taxlist_$(ftax).csv", String.(unique(tmp.tax_name)))
 
 # copy taxlist_xxx.csv file as input for phyloT, e.g.:
-# rsync -avP <path_in_HPC>/MicrobeProfiling/output/taxlist*.csv <path_local_PC>
+`rsync -avP <path_in_HPC>/MicrobeProfiling/output/taxlist*.csv <path_local_PC>`
 
-# use phyloT to make trees, with taxlist_xxx.csv as input. Save in newick format and move to
-# R.pd/data/Bacteria or ./Archaea
+# use phyloT to make trees, with taxlist_xxx.csv as input. Save in newick format and move to R.pd/data/Bacteria or ./Archaea
 
 # use R.pd/tree.R to remove bootstrap values 
 
 # copy modified trees as input for phylo_distance.jl
-# rsync -avP <path_local_PC>/R.pd/data/Bacteria/Bacteria_HB_{0..9}{0..9}.modified.newick <path_in_HPC>/MicrobeProfiling/output
+`rsync -avP <path_local_PC>/R.pd/data/Bacteria/Bacteria_HB_{0..9}{0..9}.modified.newick <path_in_HPC>/MicrobeProfiling/output`
 
 
 
@@ -43,7 +44,7 @@ writedlm("./MicrobeProfiling/output/taxlist_$(ftax).csv", String.(unique(tmp.tax
 Libs=unique(otudata.Label)
 pd = DataFrame(Label=Libs, pd_Bacteria=fill(0.0,34), pd_Archaea=fill(0.0,34))
 Threads.@threads for (i,lib) in collect(enumerate(Libs))
-    file=WORK_DIR*"HIBO_shotgun/analysis/MicrobeProfiling/output/$(ftax)_$(lib).modified.newick"
+    fil e= WORK_DIR*"HIBO_shotgun/analysis/MicrobeProfiling/output/$(ftax)_$(lib).modified.newick"
     if !isfile(file) continue end
     tree = open(parsenewick, Phylo.path(file))
     leafnames = getleafnames(tree)

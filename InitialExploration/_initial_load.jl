@@ -10,8 +10,6 @@ using Pipe: @pipe
 function write_arrow(tag::String)
     # load the data and save in Arrow format
     df = load(File(format"CSV", "./InitialExploration/data/tp-mdmg.$tag.csv.gz"));
-    ## (faster for updated aMAW...)
-    # df = load(File(format"CSV", "/projects/wintherpedersen/people/tvg137/HIBO_shotgun/EnvironmenTracker/archive_results/results_latest_amaw_ANI90/taxonomic-profiling-dmg/tp-mdmg.lca.weight-1.csv.gz"));
 
     Arrow.write("./InitialExploration/data/$tag.arrow", df; compress = :lz4)
     println("Arrow file written as ./InitialExploration/data/$tag.arrow")
