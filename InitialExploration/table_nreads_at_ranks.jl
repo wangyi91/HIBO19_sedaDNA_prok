@@ -13,7 +13,6 @@ summary_df = DataFrame()
 #for alg in [".local",".lca"]
 for rk in ["phylum","family","genus","species"]    
     # Load the dataset
-    #dt = load_object("./InitialExploration/data/$pip$alg$add.species.jld2")
     dt = load_object("./InitialExploration/data/$pip$alg$add.$rk.jld2")
 
     # Classify each row by domain based on `tax_path`
@@ -28,7 +27,6 @@ for rk in ["phylum","family","genus","species"]
 
     # Pivot the domain to columns (e.g., "phylum_Bacteria", "phylum_Archaea")
     pivoted = unstack(grouped, :Domain, :Total_Reads)
-    #rename!(pivoted, Dict("Bacteria" => "$(alg)_Bacteria", "Archaea" => "$(alg)_Archaea"))
     rename!(pivoted, Dict("Bacteria" => "$(rk)_Bacteria", "Archaea" => "$(rk)_Archaea"))
 
     # Merge into the summary DataFrame
