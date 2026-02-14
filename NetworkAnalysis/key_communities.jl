@@ -4,7 +4,7 @@ using FlashWeave, Graphs, SimpleWeightedGraphs
 using Compose, GraphPlot, Colors
 using CairoMakie, Colors
 
-### This script outputs plot and table of low-abundance communities  ###
+### This script outputs plot and table of major assemblage groups  ###
 
 include("./MicrobeProfiling/_get_annotated_df.jl")
 include("./NetworkAnalysis/_graph_process.jl")
