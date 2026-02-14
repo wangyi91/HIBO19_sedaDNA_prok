@@ -16,9 +16,7 @@ df = load_object("./deContamination/data/$tag.$frank.jld2")
 depths = df.Middle_depth |> sort |> unique;
 ages = df.yrBP |> sort |> unique;
 
-colordic = Dict("Bacteria"=>:royalblue3,"Archaea"=>:deeppink4, ""=>:teal,
-                "Embryophyta"=>:olivedrab,"Chordata"=>:hotpink,"Arthropoda"=>:darkslategrey,
-                "Non-plant eukaryote"=>:hotpink);
+colordic = Dict("Bacteria"=>:royalblue3,"Archaea"=>:deeppink4);
 
 ftax="Archaea"; Nmin=50;scale_reads = 10_000
 ftax="Bacteria"; Nmin=500;scale_reads = 50_000
@@ -26,8 +24,7 @@ ftax="Bacteria"; Nmin=500;scale_reads = 50_000
 # weight for histogram
 weightdict = Dict(
     "Archaea"     => x -> x / 30,
-    "Bacteria"    => x -> x / 200,
-    "Embryophyta" => x -> sqrt(x) / 2
+    "Bacteria"    => x -> x / 200
 )
 
 
