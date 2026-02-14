@@ -12,7 +12,7 @@ Raw sequence data (fastq files) were processed with scripts in the directory `sh
 Then, fastq files were mapped against reference databases using the `aMAW-pipeline` (Fernandez-Guerra, in prep) for taxonomic profiling using the [GTDB database](https://gtdb.ecogenomic.org) (this study used the [r207 release](https://data.gtdb.ecogenomic.org/releases/release207/)), and DNA damage is subsequently estimated with `metaDMG v0.38.0`.
 
 ## Input files
-Input files for analyses are: 
+Input files for analyses are deposited to [10.5281/zenodo.18630668](10.5281/zenodo.18630668): 
 * File `tp-mdmg.amaw.lca_ANI92.csv.gz` output from `metaDMG`, saved under `./InitialExploration/data`
 * Other intermediate files
 * Metadata are located in [metadata](https://github.com/wangyi91/sedaDNA-bacteria-archaea/tree/main/metadata)
