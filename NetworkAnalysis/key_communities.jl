@@ -46,4 +46,7 @@ nsps = [@pipe vcat(collect.(cliper[cliq_idx])[Is[i]]...) |> unique |> count(x->x
 
 # Plot: make damage-depth histogram plot, stacked by phylo dist histogram plot. Groups as panels.
 generate_plot()
+
+# Output source data table
 output_hmp_tb_of_groups()
+
