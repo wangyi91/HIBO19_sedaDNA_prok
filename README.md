@@ -5,17 +5,17 @@ This repository contains scripts for data processing, analyses and visualisation
 
 The manuscript of this study is currently provisionally accepted in _The ISME Journal_.
 
-## Prerequisite steps
+## Data preprocessing
 
 Raw sequence data (fastq files) were processed with scripts in the directory `shotgun_data_processing`.
 
 Then, fastq files were mapped against reference databases using the `aMAW-pipeline` (Fernandez-Guerra, in prep) for taxonomic profiling using the [GTDB database](https://gtdb.ecogenomic.org) (this study used the [r207 release](https://data.gtdb.ecogenomic.org/releases/release207/)), and DNA damage is subsequently estimated with `metaDMG v0.38.0`.
 
-## Input files
-Input files for analyses are deposited to [10.5281/zenodo.18630668](10.5281/zenodo.18630668): 
+## Available input files
+As an alternative to starting with raw sequence data (deposited to the European Nucleotide Archive (ENA) under accession PRJEB76926), intermediate input files for analyses are deposited to [10.5281/zenodo.18630668](10.5281/zenodo.18630668), which include: 
 * File `tp-mdmg.amaw.lca_ANI92.csv.gz` output from `metaDMG`, saved under `./InitialExploration/data`
 * Other intermediate files
-* Metadata are located in [metadata](https://github.com/wangyi91/sedaDNA-bacteria-archaea/tree/main/metadata)
+Metadata are located in [metadata](https://github.com/wangyi91/sedaDNA-bacteria-archaea/tree/main/metadata)
 
 ## Analysis modules
 ### `InitialExploration`
